@@ -1,0 +1,13 @@
+name: Test docker
+on:
+  push:
+    branches:
+      - main
+jobs:
+  schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.3
+      - name: Make sure docker is running
+        run: |
+          docker pull python

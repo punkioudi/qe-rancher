@@ -2,28 +2,24 @@ name: Schedule Rancher test on openqa.opensuse.org
 on:
   push:
     branches:
-      - o3_schedule
+      - main
   schedule:
     - cron:  '0 6 * * MON'
 jobs:
-  check:
+  schedule:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.3
-      - name: Get most recent image version
+      - name: Get something
         run: |
           git clone https://github.com/rancher/rancher.git
           cd rancher/
-          tag=$(git describe --tag $(git rev-list --tags --max-count=1))
-          echo $tag
-          docker manifest inspect rancher/rancher:$tag >/dev/null
-          STATUS=$?
-          echo ::set-output name=STATUS::$STATUS
-  schedule:
-    needs: check
-    runs-on: ubuntu-latest
-    container: registry.opensuse.org/devel/openqa/containers15.2/openqa_webui:latest
-    steps:
+          tag=$(git describe --tag $(git rev-list --tags --max-count=1)
+      - uses: actions/checkout@v2.3.3
+      - name: Check that version has been released in Dockerhub
+        run: |
+          docker pull rancher/rancher:latest
+          # docker manifest inspect rancher/rancher:v2.5.6-rc4 >/dev/null        
       - name: Get latest Tumbleweed published build number
         run: >
           VALUE=`curl -s https://openqa.opensuse.org/group_overview/1.json
